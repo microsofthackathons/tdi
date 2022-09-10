@@ -7,10 +7,9 @@ use std::io::{Result};
 use from_as::*;
 use std::fs::File;
 use std::io::Write;
-use http::*;
 use graph_rs_sdk::oauth::OAuth;
 
-use warp::{http::Response, Filter};
+use warp::Filter;
 
 // Client Credentials Grant
 // If you have already given admin consent to a user you can skip
@@ -45,7 +44,7 @@ impl Task {
 #[tokio::main]
 pub async fn login() -> Result<()> {
   println!("Loggin In");
-    let (tx, rx) = tokio::sync::oneshot::channel::<u8>();
+    let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<String>();
       // If this is not the first time you are using the client credentials grant
     // then you only have to run request_access_token() and you can comment out
     // what is below.
@@ -56,7 +55,7 @@ pub async fn login() -> Result<()> {
         });
 
     let routes = warp::get().and(warp::path("redirect")).and(query).map(
-        |cc: Option<AccessCode>| match cc {
+        move |cc: Option<AccessCode>| match cc {
             Some(access_code) => {
                 // Print out for debugging purposes.
                 println!("CODE: {:#?}", access_code.code);
@@ -70,13 +69,13 @@ pub async fn login() -> Result<()> {
                 // Response::builder().body(String::from(
                 //     "Successfully Logged In! You can close your browser.",
                 // ))
-                tx.send(0).unwrap();
-                Ok(warp::reply::with_status("OK", http::status::StatusCode::CREATED))
+                tx.send(access_code.code).unwrap();
+                Ok(warp::reply::with_status("Hello from <b>tdi</b> - the access code was received and stored locally, you may safely close this browser window!", http::status::StatusCode::CREATED))
             }
             None =>  {
-                tx.send(1).unwrap();
+                tx.send("error getting access code".to_string()).unwrap();
                 //Response::builder().body(String::from("There was an issue getting the access code."))
-                Ok(warp::reply::with_status("Error", http::status::StatusCode::NOT_FOUND))
+                Ok(warp::reply::with_status("Hello from <b>tdi</b> - error encountered requesting the access code.", http::status::StatusCode::NOT_FOUND))
             },
         },
     );
@@ -88,10 +87,10 @@ pub async fn login() -> Result<()> {
 
 
     //warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
-    println!("Spawning server");
+    println!("Spawning server, awaiting access code.");
     let server = warp::serve(routes)
       .bind_with_graceful_shutdown(([127, 0, 0, 1], 8000),
-                   async { rx.await.ok(); })
+                   async move { rx.recv().await; })
       .1;
 
     println!("waiting for result");
@@ -149,7 +148,7 @@ fn get_oauth_client() -> OAuth {
     oauth
 }
 
-async fn set_and_req_access_code(access_code: AccessCode) {
+fn set_and_req_access_code(access_code: AccessCode) {
     let mut oauth = get_oauth_client();
     // The response type is automatically set to token and the grant type is automatically
     // set to authorization_code if either of these were not previously set.
