@@ -8,10 +8,13 @@ use clap::Parser;
 
 use cli::{Commands::*, Cli};
 
+
+
+
+
 fn main() -> anyhow::Result<()> {
-    let cli 
-    = Cli::parse();
-        
+    let cli= Cli::parse();
+
     match &cli.command {
         Some(Login {}) => tasks::login(),
         Some(Show { json }) => tasks::show_tasks(json),
@@ -26,4 +29,5 @@ fn main() -> anyhow::Result<()> {
     }?;
 
     Ok(())
+
 }
