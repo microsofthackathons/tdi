@@ -5,7 +5,9 @@ use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::io::{Result};
 use from_as::*;
-
+use std::fs::File;
+use std::io::Write;
+use http::*;
 use graph_rs_sdk::oauth::OAuth;
 
 use warp::{http::Response, Filter};
@@ -14,10 +16,10 @@ use warp::{http::Response, Filter};
 // If you have already given admin consent to a user you can skip
 // browser authorization step and go strait to requesting an access token.
 // The client_id and client_secret must be changed before running this example.
-static CLIENT_ID: &str = "<CLIENT_ID>";
-static CLIENT_SECRET: &str = "<CLIENT_SECRET>";
+static CLIENT_ID: &str = "987489df-248b-4117-a8ad-0280e1fe09ec";
+static CLIENT_SECRET: &str = "~Qw7Q~xM9MsI1bvwt.Fulx8_95NI_JHVmOXVecIY";
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
     //admin_consent: bool,
     code: String,
@@ -43,6 +45,7 @@ impl Task {
 #[tokio::main]
 pub async fn login() -> Result<()> {
   println!("Loggin In");
+    let (tx, rx) = tokio::sync::oneshot::channel::<u8>();
       // If this is not the first time you are using the client credentials grant
     // then you only have to run request_access_token() and you can comment out
     // what is below.
@@ -57,17 +60,23 @@ pub async fn login() -> Result<()> {
             Some(access_code) => {
                 // Print out for debugging purposes.
                 println!("CODE: {:#?}", access_code.code);
+                let mut file = File::create("./.code").unwrap();
+                writeln!(&mut file, "{}", access_code.code).unwrap();
 
                 // Request an access token.
-                set_and_req_access_code(access_code);
-
+                // set_and_req_access_code(access_code);
+                
                 // Generic login page response.
-                Response::builder().body(String::from(
-                    "Successfully Logged In! You can close your browser.",
-                ))
+                // Response::builder().body(String::from(
+                //     "Successfully Logged In! You can close your browser.",
+                // ))
+                tx.send(0).unwrap();
+                Ok(warp::reply::with_status("OK", http::status::StatusCode::CREATED))
             }
             None =>  {
-                Response::builder().body(String::from("There was an issue getting the access code."))
+                tx.send(1).unwrap();
+                //Response::builder().body(String::from("There was an issue getting the access code."))
+                Ok(warp::reply::with_status("Error", http::status::StatusCode::NOT_FOUND))
             },
         },
     );
@@ -77,7 +86,17 @@ pub async fn login() -> Result<()> {
     let mut request = oauth.build().code_flow();
     request.browser_authorization().open().unwrap();
 
-    warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
+
+    //warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
+    println!("Spawning server");
+    let server = warp::serve(routes)
+      .bind_with_graceful_shutdown(([127, 0, 0, 1], 8000),
+                   async { rx.await.ok(); })
+      .1;
+
+    println!("waiting for result");
+    server.await;
+
   Ok(())
 }
 
@@ -130,7 +149,7 @@ fn get_oauth_client() -> OAuth {
     oauth
 }
 
-fn set_and_req_access_code(access_code: AccessCode) {
+async fn set_and_req_access_code(access_code: AccessCode) {
     let mut oauth = get_oauth_client();
     // The response type is automatically set to token and the grant type is automatically
     // set to authorization_code if either of these were not previously set.
