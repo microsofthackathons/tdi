@@ -222,7 +222,6 @@ fn read_access_token() -> String {
 fn get_config_dir() -> String {
   let proj_dirs = ProjectDirs::from("com", "microsofthackathons", "tdi");
   let config_dir = proj_dirs.unwrap().config_dir().to_path_buf();
-  let config_dir_string = config_dir.into_os_string().into_string().unwrap();
-  config_dir_string
+  config_dir.into_os_string().into_string().unwrap()
 }
 
