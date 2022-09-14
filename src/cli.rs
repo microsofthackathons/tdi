@@ -30,6 +30,10 @@ pub enum Commands {
     Delete {
         id: u32
     },
+    /// Show user details
+    Me {
+        json: bool,
+    },
 }
 
 #[derive(Parser)]
