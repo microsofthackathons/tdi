@@ -6,18 +6,18 @@ use serde::{Deserialize, Serialize};
 use std::io::{Result};
 use from_as::*;
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use graph_rs_sdk::oauth::OAuth;
 use graph_rs_sdk::prelude::*;
-
 use warp::Filter;
+use directories::ProjectDirs;
 
 // Client Credentials Grant
 // If you have already given admin consent to a user you can skip
 // browser authorization step and go strait to requesting an access token.
 // The client_id and client_secret must be changed before running this example.
-static CLIENT_ID: &str = "";
-static CLIENT_SECRET: &str = "";
+static CLIENT_ID: &str = "987489df-248b-4117-a8ad-0280e1fe09ec";
+static CLIENT_SECRET: &str = "~Qw7Q~xM9MsI1bvwt.Fulx8_95NI_JHVmOXVecIY";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
@@ -44,7 +44,7 @@ impl Task {
 
 #[tokio::main]
 pub async fn login() -> Result<()> {
-  println!("Loggin In");
+  println!("tdi: authenticating, a browser window will open.");
     let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<String>();
       // If this is not the first time you are using the client credentials grant
     // then you only have to run request_access_token() and you can comment out
@@ -195,19 +195,34 @@ async fn req_access_token(code: String) {
     // If all went well here we can print out the OAuth config with the Access Token.
   // println!("{:#?}", &oauth);
 
+  match std::fs::create_dir_all(get_config_dir()) {
+    Ok(()) => {println!("tdi: creating directory path for access token config.")},
+    Err(_) => {
+      println!("tdi: error created directory path for access token config.");
+      std::process::exit(1);
+    }
+  }
+  let config_path = get_config_dir() + "/tdi.json";
     // Save our configuration to a file so we can retrieve it from other requests.
   oauth
-    .as_file("./tdi.json")
+    .as_file(config_path)
     .unwrap();
 
   println!("tdi: logged in, and stored token for future use.");
 }
 
 fn read_access_token() -> String {
-  let mut file = File::open("./.tokentdi").expect("Error opening File");
+  let mut file = File::open(get_config_dir() + "/tdi.json").expect("Error opening File");
   let mut code = String::new();
   file.read_to_string(&mut code).expect("error reading code from .code");
   // println!("T: {}", code);
   code
+}
+
+fn get_config_dir() -> String {
+  let proj_dirs = ProjectDirs::from("com", "microsofthackathons", "tdi");
+  let config_dir = proj_dirs.unwrap().config_dir().to_path_buf();
+  let config_dir_string = config_dir.into_os_string().into_string().unwrap();
+  config_dir_string
 }
 

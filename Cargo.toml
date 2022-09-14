@@ -25,6 +25,7 @@ from_as = "0.1"
 warp = "0.3"
 tokio = "1.21"
 http = "0.2"
+directories = "4.0"
 
 [dependencies.chrono]
 version = "0.4.19"
