@@ -5,8 +5,6 @@ use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::io::{Result};
 use from_as::*;
-use std::fs::File;
-use std::io::Read;
 use graph_rs_sdk::oauth::OAuth;
 use graph_rs_sdk::prelude::*;
 use warp::Filter;
@@ -16,8 +14,8 @@ use directories::ProjectDirs;
 // If you have already given admin consent to a user you can skip
 // browser authorization step and go strait to requesting an access token.
 // The client_id and client_secret must be changed before running this example.
-static CLIENT_ID: &str = "987489df-248b-4117-a8ad-0280e1fe09ec";
-static CLIENT_SECRET: &str = "~Qw7Q~xM9MsI1bvwt.Fulx8_95NI_JHVmOXVecIY";
+static CLIENT_ID: &str = "";
+static CLIENT_SECRET: &str = "";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
@@ -212,11 +210,10 @@ async fn req_access_token(code: String) {
 }
 
 fn read_access_token() -> String {
-  let mut file = File::open(get_config_dir() + "/tdi.json").expect("Error opening File");
-  let mut code = String::new();
-  file.read_to_string(&mut code).expect("error reading code from .code");
-  // println!("T: {}", code);
-  code
+  let data = std::fs::read_to_string(get_config_dir() + "/tdi.json").expect("tdi: unable to read access token configuration.");
+  let res: serde_json::Value = serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
+  println!("{}", res["access_token"]["access_token"]);
+  res["access_token"]["access_token"].to_string()
 }
 
 fn get_config_dir() -> String {
