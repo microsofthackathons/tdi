@@ -21,3 +21,7 @@
 ## Project Todos 
 
 Track these things as issues.  Will take a whack at populating a few things.
+
+## Misc
+
+https://developer.microsoft.com/en-us/graph/graph-explorer

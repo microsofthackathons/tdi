@@ -9,11 +9,11 @@ use clap::Parser;
 use cli::{Commands::*, Cli};
 
 fn main() -> anyhow::Result<()> {
-    let cli 
-    = Cli::parse();
-        
+    let cli= Cli::parse();
+
     match &cli.command {
         Some(Login {}) => tasks::login(),
+        Some(Me { json }) => tasks::show_me(json),
         Some(Show { json }) => tasks::show_tasks(json),
         Some(Add { task }) => tasks::add_task(task),
         Some(Complete { id }) => tasks::complete_task(id),
@@ -26,4 +26,5 @@ fn main() -> anyhow::Result<()> {
     }?;
 
     Ok(())
+
 }
