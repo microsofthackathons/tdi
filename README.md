@@ -10,6 +10,14 @@ The command-line interface, for some, is the natural way to work on a computer. 
 
 MIT
 
+## Development
+
+There is an "official" application registration in Azure for the client.  But if you're wanting to use your own for development you can follow these steps:
+
+https://learn.microsoft.com/en-us/azure/healthcare-apis/register-application
+
+You will need both the `CLIENT_ID` and `CLIENT_SECRET`.  In addition you'll need to add the appropriate API permissions for `user.read` and `tasks.readwrite` in order for the application to access the Graph API.  With the credentials in hand you will then add them into the source code before building - here: https://github.com/microsofthackathons/tdi/blob/develop/src/tasks.rs#L17
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
