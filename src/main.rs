@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 mod cli;
-mod tasks;
 mod lists;
+mod tasks;
 
 use clap::Parser;
 
