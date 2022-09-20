@@ -7,6 +7,8 @@ use clap::{Parser, Subcommand};
 pub enum Commands {
     /// Login to Microsoft's Graph database
     Login {},
+    /// Logout of Microsoft's SSO
+    Logout {},
     /// Display the kanban board.
     Show {
         /// Display as JSON instead of the default table
@@ -24,7 +26,10 @@ pub enum Commands {
     /// Delete the given task
     Delete { id: u32 },
     /// Show user details
-    Me { json: bool },
+    Me {
+        /// Display as JSON instead of default table
+        json: bool,
+    },
     /// Show the lists in the user's ToDo
     Lists {},
     /// Repl todo shell
