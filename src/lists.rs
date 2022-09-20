@@ -4,7 +4,7 @@
 use serde::{Deserialize, Serialize};
 use std::io::Result;
 
-use crate::tasks::read_access_token;
+use crate::auth::read_access_token;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

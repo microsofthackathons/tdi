@@ -4,6 +4,7 @@
 mod cli;
 mod lists;
 mod tasks;
+mod auth;
 
 use clap::Parser;
 
@@ -13,7 +14,8 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Login {}) => tasks::login(),
+        Some(Login {}) => auth::login(),
+        Some(Logout {}) => auth::logout(),
         Some(Me { json }) => tasks::show_me(json),
         Some(Show { json }) => tasks::show_tasks(json),
         Some(Add { task }) => tasks::add_task(task),
