@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 use chrono::{serde::ts_seconds, DateTime, Utc};
+use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::io::{Result};
 use from_as::*;
@@ -10,12 +11,16 @@ use graph_rs_sdk::prelude::*;
 use warp::Filter;
 use directories::ProjectDirs;
 
+use crate::cli::Cli;
+use crate::cli::Commands::*;
+
 // Client Credentials Grant
 // If you have already given admin consent to a user you can skip
 // browser authorization step and go strait to requesting an access token.
 // The client_id and client_secret must be changed before running this example.
 static CLIENT_ID: &str = "";
 static CLIENT_SECRET: &str = "";
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
@@ -221,3 +226,34 @@ fn get_config_dir() -> String {
   config_dir.into_os_string().into_string().unwrap()
 }
 
+
+
+pub fn interactive()->Result<()>{
+  let mut rl = rustyline::Editor::<()>::new().expect("unable to create interactive shell");
+  let command = rl.readline("tdi>>");
+
+  loop{
+    match command {
+      Ok(ref command)=>{
+        let args:Vec<&str> = command.split_whitespace().collect();
+        let command = Cli::try_parse_from(args).expect("unable to parse");
+        match &command.command {
+          Some(Login {}) => login(),
+          Some(Me { json }) => show_me(json),
+          Some(Show { json }) => show_tasks(json),
+          Some(Add { task }) => add_task(task),
+          Some(Complete { id }) => complete_task(id),
+          Some(Reopen { id }) => reopen_task(id),
+          Some(Delete { id }) => delete_task(id),
+          _ => {
+            println!("command is {:?}", command);
+              return Ok(())
+          }
+      }?;
+      },
+      Err(_)=>{}
+    }
+  }
+
+  Ok(())
+}

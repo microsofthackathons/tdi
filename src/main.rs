@@ -7,10 +7,10 @@ mod lists;
 
 use clap::Parser;
 
-use cli::{Commands::*, Cli};
+use cli::{Cli, Commands::*};
 
 fn main() -> anyhow::Result<()> {
-    let cli= Cli::parse();
+    let cli = Cli::parse();
 
     match &cli.command {
         Some(Login {}) => tasks::login(),
@@ -21,6 +21,7 @@ fn main() -> anyhow::Result<()> {
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
         Some(Lists {}) => lists::get_todo_lists(),
+        Some(Intr) => tasks::interactive(),
         None => {
             println!("Default subcommand");
             Ok(())
@@ -28,5 +29,4 @@ fn main() -> anyhow::Result<()> {
     }?;
 
     Ok(())
-
 }
