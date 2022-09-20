@@ -7,9 +7,9 @@ use graph_rs_sdk::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
 
+use crate::auth::*;
 use crate::cli::Cli;
 use crate::cli::Commands::*;
-use crate::auth::*;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Task {

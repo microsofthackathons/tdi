@@ -28,7 +28,7 @@ pub fn get_oauth_client() -> OAuth {
         .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
-        .authorize_url("https://login.live.com/oauth20_authorize.srf?")
+        .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
         .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
     oauth
 }
@@ -42,7 +42,7 @@ pub async fn req_access_token(code: String) {
         .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
-        .authorize_url("https://login.live.com/oauth20_authorize.srf?")
+        .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
         .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
 
     // The response type is automatically set to token and the grant type is automatically
@@ -77,7 +77,7 @@ pub async fn req_access_token(code: String) {
     // Save our configuration to a file so we can retrieve it from other requests.
     oauth.as_file(config_path).unwrap();
 
-    println!("tdi: logged in, and stored token for future use.");
+    println!("tdi: logged in, and stored token for future use at {}.", get_config_dir());
 }
 
 pub fn read_access_token() -> String {
@@ -87,7 +87,6 @@ pub fn read_access_token() -> String {
         serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
     res["access_token"]["access_token"].to_string()
 }
-
 
 fn get_config_dir() -> String {
     let proj_dirs = ProjectDirs::from("com", "microsofthackathons", "tdi");
@@ -142,5 +141,14 @@ pub async fn login() -> Result<()> {
 
 pub fn logout() -> Result<()> {
     println!("tdi: logging out of Microsoft SSO");
+    let mut oauth: OAuth = OAuth::new();
+    oauth
+        .client_id(CLIENT_ID)
+        .logout_url("https://login.microsoftonline.com/common/oauth2/v2.0/logout")
+        .post_logout_redirect_uri("http://localhost:8000/redirect");
+    oauth.v1_logout().unwrap();
+
+    std::fs::remove_file(get_config_dir() + "/tdi.json")?;
+    // TODO: remove the OAuth authorization and delete the locally stored cred
     Ok(())
 }

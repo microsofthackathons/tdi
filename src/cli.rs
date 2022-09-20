@@ -26,9 +26,10 @@ pub enum Commands {
     /// Delete the given task
     Delete { id: u32 },
     /// Show user details
-    Me { 
+    Me {
         /// Display as JSON instead of default table
-        json: bool },
+        json: bool,
+    },
     /// Show the lists in the user's ToDo
     Lists {},
     /// Repl todo shell

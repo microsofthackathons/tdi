@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation - 2022.
 // Licensed under the MIT License.
 
+mod auth;
 mod cli;
 mod lists;
 mod tasks;
-mod auth;
 
 use clap::Parser;
 
