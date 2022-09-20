@@ -26,6 +26,7 @@ warp = "0.3"
 tokio = "1.21"
 http = "0.2"
 directories = "4.0"
+rustyline = "10.0.0"
 
 [dependencies.chrono]
 version = "0.4.19"
