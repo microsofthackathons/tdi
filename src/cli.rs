@@ -3,7 +3,7 @@
 
 use clap::{Parser, Subcommand};
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Login to Microsoft's Graph database
     Login {
@@ -34,9 +34,11 @@ pub enum Commands {
     Me {
         json: bool,
     },
+    /// Repl todo shell
+    Intr,
 }
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 #[clap(propagate_version = true)]
 /// Simple CLI for Microsoft's To Do tasks

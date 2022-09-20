@@ -6,10 +6,10 @@ mod tasks;
 
 use clap::Parser;
 
-use cli::{Commands::*, Cli};
+use cli::{Cli, Commands::*};
 
 fn main() -> anyhow::Result<()> {
-    let cli= Cli::parse();
+    let cli = Cli::parse();
 
     match &cli.command {
         Some(Login {}) => tasks::login(),
@@ -19,6 +19,7 @@ fn main() -> anyhow::Result<()> {
         Some(Complete { id }) => tasks::complete_task(id),
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
+        Some(Intr) => tasks::interactive(),
         None => {
             println!("Default subcommand");
             Ok(())
@@ -26,5 +27,4 @@ fn main() -> anyhow::Result<()> {
     }?;
 
     Ok(())
-
 }
