@@ -3,6 +3,7 @@
 
 mod cli;
 mod tasks;
+mod lists;
 
 use clap::Parser;
 
@@ -19,6 +20,7 @@ fn main() -> anyhow::Result<()> {
         Some(Complete { id }) => tasks::complete_task(id),
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
+        Some(Lists {}) => lists::get_todo_lists(),
         Some(Intr) => tasks::interactive(),
         None => {
             println!("Default subcommand");

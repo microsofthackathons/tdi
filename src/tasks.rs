@@ -214,10 +214,9 @@ async fn req_access_token(code: String) {
   println!("tdi: logged in, and stored token for future use.");
 }
 
-fn read_access_token() -> String {
+pub fn read_access_token() -> String {
   let data = std::fs::read_to_string(get_config_dir() + "/tdi.json").expect("tdi: unable to read access token configuration.");
   let res: serde_json::Value = serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-  println!("{}", res["access_token"]["access_token"]);
   res["access_token"]["access_token"].to_string()
 }
 

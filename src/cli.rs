@@ -34,6 +34,9 @@ pub enum Commands {
     Me {
         json: bool,
     },
+    /// Show the lists in the user's ToDo
+    Lists {
+    },
     /// Repl todo shell
     Intr,
 }
