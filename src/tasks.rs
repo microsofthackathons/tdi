@@ -36,7 +36,6 @@ impl Task {
 pub fn show_me(json: &bool) -> Result<()> {
     let token = read_access_token();
     let client = Graph::new(&token);
-    println!("GRAPHCLIENT: {:?}", client);
 
     match client.v1().me().get_user().send() {
         Ok(res) => {

@@ -81,7 +81,12 @@ pub fn read_access_token() -> String {
         .expect("tdi: unable to read access token configuration.");
     let res: serde_json::Value =
         serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-    res["access_token"]["access_token"].to_string()
+    let token: Option<&str> = res.get("access_token")
+        .and_then(|value| value.get("access_token"))
+        .and_then(|value| value.as_str());
+
+    let token = token.unwrap();
+    token.to_string()
 }
 
 fn get_config_dir() -> String {
