@@ -45,9 +45,9 @@ pub async fn req_access_token(code: String) {
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
         .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
 
-    // The response type is automatically set to token and the grant type is automatically
-    // set to authorization_code if either of these were not previously set.
-    // This is done here as an example.
+    // The response type is automatically set to token and the grant type is
+    // automatically set to authorization_code if either of these were not
+    // previously set. This is done here as an example.
     oauth.access_code(code.as_str());
 
     let mut request = oauth.build_async().authorization_code_grant();
@@ -61,8 +61,8 @@ pub async fn req_access_token(code: String) {
 
     oauth.access_token(access_token);
 
-    // If all went well here we can print out the OAuth config with the Access Token.
-    // println!("{:#?}", &oauth);
+    // If all went well here we can print out the OAuth config with the Access
+    // Token. println!("{:#?}", &oauth);
 
     match std::fs::create_dir_all(get_config_dir()) {
         Ok(()) => {
@@ -77,7 +77,10 @@ pub async fn req_access_token(code: String) {
     // Save our configuration to a file so we can retrieve it from other requests.
     oauth.as_file(config_path).unwrap();
 
-    println!("tdi: logged in, and stored token for future use at {}.", get_config_dir());
+    println!(
+        "tdi: logged in, and stored token for future use at {}.",
+        get_config_dir()
+    );
 }
 
 pub fn read_access_token() -> String {
