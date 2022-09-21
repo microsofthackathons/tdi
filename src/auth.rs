@@ -9,9 +9,8 @@ use std::io::Result;
 use warp::Filter;
 
 // Client Credentials Grant
-// If you have already given admin consent to a user you can skip
-// browser authorization step and go strait to requesting an access token.
-// The client_id and client_secret must be changed before running this example.
+// If you have already given admin consent to a user you can skip browser authorization step and go strait to requesting an access token. The client_id
+// and client_secret must be changed before running this example.
 static CLIENT_ID: &str = "f7adafb9-4354-4008-8707-63776b430fc9";
 
 #[derive(Debug, Serialize, Deserialize)]
