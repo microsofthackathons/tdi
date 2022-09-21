@@ -16,7 +16,6 @@ static CLIENT_ID: &str = "f7adafb9-4354-4008-8707-63776b430fc9";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
-    //admin_consent: bool,
     code: String,
 }
 
@@ -33,7 +32,6 @@ pub fn get_oauth_client() -> OAuth {
 }
 
 pub async fn req_access_token(code: String) {
-    //let mut oauth = get_oauth_client();
     let mut oauth = OAuth::new();
     oauth
         .client_id(CLIENT_ID)
