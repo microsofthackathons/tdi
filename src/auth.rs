@@ -73,7 +73,10 @@ pub async fn req_access_token(code: String) {
     // Save our configuration to a file so we can retrieve it from other requests.
     oauth.as_file(config_path).unwrap();
 
-    println!("tdi: logged in, and stored token for future use at {}.", get_config_dir());
+    println!(
+        "tdi: logged in, and stored token for future use at {}.",
+        get_config_dir()
+    );
 }
 
 pub fn read_access_token() -> String {
@@ -81,7 +84,8 @@ pub fn read_access_token() -> String {
         .expect("tdi: unable to read access token configuration.");
     let res: serde_json::Value =
         serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-    let token: Option<&str> = res.get("access_token")
+    let token: Option<&str> = res
+        .get("access_token")
         .and_then(|value| value.get("access_token"))
         .and_then(|value| value.as_str());
 
