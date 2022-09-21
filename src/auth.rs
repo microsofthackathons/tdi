@@ -25,7 +25,6 @@ pub fn get_oauth_client() -> OAuth {
     oauth
         .client_id(CLIENT_ID)
         .add_scope("tasks.readwrite")
-        .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
@@ -39,7 +38,6 @@ pub async fn req_access_token(code: String) {
     oauth
         .client_id(CLIENT_ID)
         .add_scope("tasks.readwrite")
-        .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
