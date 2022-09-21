@@ -31,6 +31,8 @@ jobs:
         override: true
     - name: rust-rustfmt-check
       uses: mbrobbel/rustfmt-check@0.3.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
   functional_test:
     strategy:
