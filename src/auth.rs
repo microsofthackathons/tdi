@@ -56,7 +56,7 @@ pub async fn req_access_token(code: String) {
         Err(err) => {
             println!("tdi login error: {:?}", err);
             std::process::exit(1);
-        }
+        },
     };
 
     oauth.access_token(access_token);
@@ -67,11 +67,11 @@ pub async fn req_access_token(code: String) {
     match std::fs::create_dir_all(get_config_dir()) {
         Ok(()) => {
             println!("tdi: creating directory path for access token config.")
-        }
+        },
         Err(_) => {
             println!("tdi: error created directory path for access token config.");
             std::process::exit(1);
-        }
+        },
     }
     let config_path = get_config_dir() + "/tdi.json";
     // Save our configuration to a file so we can retrieve it from other requests.
