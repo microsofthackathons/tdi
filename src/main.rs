@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
         None => {
             println!("Default subcommand");
             Ok(())
-        }
+        },
     }?;
 
     Ok(())

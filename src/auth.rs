@@ -41,9 +41,9 @@ pub async fn req_access_token(code: String) {
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
         .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
 
-    // The response type is automatically set to token and the grant type is automatically
-    // set to authorization_code if either of these were not previously set.
-    // This is done here as an example.
+    // The response type is automatically set to token and the grant type is
+    // automatically set to authorization_code if either of these were not
+    // previously set. This is done here as an example.
     oauth.access_code(code.as_str());
 
     let mut request = oauth.build_async().authorization_code_grant();
@@ -52,22 +52,22 @@ pub async fn req_access_token(code: String) {
         Err(err) => {
             println!("tdi login error: {:?}", err);
             std::process::exit(1);
-        }
+        },
     };
 
     oauth.access_token(access_token);
 
-    // If all went well here we can print out the OAuth config with the Access Token.
-    // println!("{:#?}", &oauth);
+    // If all went well here we can print out the OAuth config with the Access
+    // Token. println!("{:#?}", &oauth);
 
     match std::fs::create_dir_all(get_config_dir()) {
         Ok(()) => {
             println!("tdi: creating directory path for access token config.")
-        }
+        },
         Err(_) => {
             println!("tdi: error created directory path for access token config.");
             std::process::exit(1);
-        }
+        },
     }
     let config_path = get_config_dir() + "/tdi.json";
     // Save our configuration to a file so we can retrieve it from other requests.
@@ -80,17 +80,23 @@ pub async fn req_access_token(code: String) {
 }
 
 pub fn read_access_token() -> String {
-    let data = std::fs::read_to_string(get_config_dir() + "/tdi.json")
-        .expect("tdi: unable to read access token configuration.");
-    let res: serde_json::Value =
-        serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-    let token: Option<&str> = res
-        .get("access_token")
-        .and_then(|value| value.get("access_token"))
-        .and_then(|value| value.as_str());
+    match std::fs::read_to_string(get_config_dir() + "/tdi.json") {
+        Ok(data) => {
+            let res: serde_json::Value =
+                serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
+            let token: Option<&str> = res
+                .get("access_token")
+                .and_then(|value| value.get("access_token"))
+                .and_then(|value| value.as_str());
 
-    let token = token.unwrap();
-    token.to_string()
+            let token = token.unwrap();
+            token.to_string()
+        },
+        Err(_) => {
+            println!("tdi: unable to read access token configuration, perhaps run `tdi login`.");
+            std::process::exit(0);
+        },
+    }
 }
 
 fn get_config_dir() -> String {
