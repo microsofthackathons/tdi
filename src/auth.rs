@@ -15,7 +15,6 @@ static CLIENT_ID: &str = "f7adafb9-4354-4008-8707-63776b430fc9";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
-    //admin_consent: bool,
     code: String,
 }
 
@@ -24,7 +23,6 @@ pub fn get_oauth_client() -> OAuth {
     oauth
         .client_id(CLIENT_ID)
         .add_scope("tasks.readwrite")
-        .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
@@ -33,12 +31,10 @@ pub fn get_oauth_client() -> OAuth {
 }
 
 pub async fn req_access_token(code: String) {
-    //let mut oauth = get_oauth_client();
     let mut oauth = OAuth::new();
     oauth
         .client_id(CLIENT_ID)
         .add_scope("tasks.readwrite")
-        .add_scope("tasks.read")
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
@@ -87,7 +83,13 @@ pub fn read_access_token() -> String {
         .expect("tdi: unable to read access token configuration.");
     let res: serde_json::Value =
         serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-    res["access_token"]["access_token"].to_string()
+    let token: Option<&str> = res
+        .get("access_token")
+        .and_then(|value| value.get("access_token"))
+        .and_then(|value| value.as_str());
+
+    let token = token.unwrap();
+    token.to_string()
 }
 
 fn get_config_dir() -> String {
