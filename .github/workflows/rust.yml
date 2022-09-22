@@ -23,8 +23,6 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -35,6 +33,8 @@ jobs:
       - uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      pull-requests: write
 
   functional_test:
     strategy:
