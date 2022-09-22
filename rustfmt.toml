@@ -1,5 +1,1 @@
-brace_style="SameLineWhere"
-wrap_comments=true
-comment_width=80
-empty_item_single_line=true
-match_block_trailing_comma=true
+## Keep empty to prevent needing to use nightly
