@@ -9,9 +9,10 @@ use std::io::Result;
 use warp::Filter;
 
 // Client Credentials Grant
-// If you have already given admin consent to a user you can skip browser authorization step and go strait to requesting an access token. The client_id
-// and client_secret must be changed before running this example.
-static CLIENT_ID: &str = "f7adafb9-4354-4008-8707-63776b430fc9";
+// If you have already given admin consent to a user you can skip
+// browser authorization step and go strait to requesting an access token.
+// The client_id and client_secret must be changed before running this example.
+static CLIENT_ID: &str = "6c3ae59f-ebe9-4dad-b4e6-8873545b6155";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
@@ -79,17 +80,23 @@ pub async fn req_access_token(code: String) {
 }
 
 pub fn read_access_token() -> String {
-    let data = std::fs::read_to_string(get_config_dir() + "/tdi.json")
-        .expect("tdi: unable to read access token configuration.");
-    let res: serde_json::Value =
-        serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
-    let token: Option<&str> = res
-        .get("access_token")
-        .and_then(|value| value.get("access_token"))
-        .and_then(|value| value.as_str());
+    match std::fs::read_to_string(get_config_dir() + "/tdi.json") {
+        Ok(data) => {
+            let res: serde_json::Value =
+                serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
+            let token: Option<&str> = res
+                .get("access_token")
+                .and_then(|value| value.get("access_token"))
+                .and_then(|value| value.as_str());
 
-    let token = token.unwrap();
-    token.to_string()
+            let token = token.unwrap();
+            token.to_string()
+        },
+        Err(_) => {
+            println!("tdi: unable to read access token configuration, perhaps run `tdi login`.");
+            std::process::exit(0);
+        },
+    }
 }
 
 fn get_config_dir() -> String {
