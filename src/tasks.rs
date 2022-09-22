@@ -3,10 +3,10 @@
 
 use chrono::{serde::ts_seconds, DateTime, Utc};
 use clap::Parser;
+use cli_table::{format::Justify, print_stdout, Cell, Style, Table};
 use graph_rs_sdk::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
-use cli_table::{format::Justify, print_stdout, Cell, Style, Table};
 
 use crate::auth::*;
 use crate::cli::Cli;
@@ -37,24 +37,52 @@ impl Task {
 #[derive(Debug, Serialize, Deserialize)]
 struct User {
     pub display_name: String,
+    pub given_name: String,
+    pub surname: String,
     pub id: String,
-    pub job_title: String
+    pub job_title: String,
+    pub mail: String,
+    pub mobile_phone: String,
+    pub office_location: String,
+    pub user_principal_name: String,
 }
 
 impl User {
-    pub fn new(display_name: String, id: String, job_title: String) -> User {
+    pub fn new(
+        display_name: String,
+        given_name: String,
+        surname: String,
+        id: String,
+        job_title: String,
+        mail: String,
+        mobile_phone: String,
+        office_location: String,
+        user_principal_name: String,
+    ) -> User {
         User {
             display_name,
+            given_name,
+            surname,
             id,
-            job_title
+            job_title,
+            mail,
+            mobile_phone,
+            office_location,
+            user_principal_name,
         }
     }
 
     pub fn empty() -> User {
         User {
             display_name: "".to_string(),
+            given_name: "".to_string(),
+            surname: "".to_string(),
             id: "".to_string(),
-            job_title: "".to_string()
+            job_title: "".to_string(),
+            mail: "".to_string(),
+            mobile_phone: "".to_string(),
+            office_location: "".to_string(),
+            user_principal_name: "".to_string(),
         }
     }
 }
@@ -72,33 +100,91 @@ pub fn show_me(json: &bool) -> Result<()> {
                 );
             } else {
                 let user = match res.body().as_object() {
-                    None => {User::empty()}
-                    Some(map) => {User::new(
-                        map.get(&"displayName".to_string()).unwrap().to_string().replace("\"", ""),
-                        map.get(&"id".to_string()).unwrap().to_string().replace("\"", ""),
-                        map.get(&"jobTitle".to_string()).unwrap().to_string().replace("\"", "")) }
+                    None => User::empty(),
+                    Some(map) => User::new(
+                        map.get(&"displayName".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"givenName".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"surname".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"id".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"jobTitle".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"mail".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"mobilePhone".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"officeLocation".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                        map.get(&"userPrincipalName".to_string())
+                            .unwrap()
+                            .to_string()
+                            .replace("\"", ""),
+                    ),
                 };
 
                 let table = vec![
-                    vec!["Display Name".cell().bold(true), user.display_name.cell().justify(Justify::Right)],
-                    vec!["ID".cell().bold(true), user.id.cell().justify(Justify::Right)],
-                    vec!["Job Title".cell().bold(true), user.job_title.cell().justify(Justify::Right)],
+                    vec![
+                        "Display Name".cell().bold(true),
+                        user.display_name.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "Given Name".cell().bold(true),
+                        user.given_name.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "Surname".cell().bold(true),
+                        user.surname.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "ID".cell().bold(true),
+                        user.id.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "Mail".cell().bold(true),
+                        user.mail.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "Mobile Phone".cell().bold(true),
+                        user.mobile_phone.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "Office Location".cell().bold(true),
+                        user.office_location.cell().justify(Justify::Right),
+                    ],
+                    vec![
+                        "User Principal Name".cell().bold(true),
+                        user.user_principal_name.cell().justify(Justify::Right),
+                    ],
                 ]
-                    .table()
-                    .title(
-                        vec![
-                            "Items".cell().bold(true),
-                            "Details".cell().bold(true)
-                        ]
-                    )
-                    .bold(true);
+                .table()
+                .title(vec!["Items".cell().bold(true), "Details".cell().bold(true)])
+                .bold(true);
 
                 match print_stdout(table) {
                     Err(e) => println!("{:?}", e),
-                    _ => ()
+                    _ => (),
                 }
             }
-        },
+        }
         Err(err) => println!("Error: {}", err),
     }
     Ok(())
@@ -168,10 +254,10 @@ pub fn interactive() -> Result<()> {
                     _ => {
                         println!("command is {:?}", command);
                         return Ok(());
-                    },
+                    }
                 }?;
-            },
-            Err(_) => {},
+            }
+            Err(_) => {}
         }
     }
 
