@@ -6,6 +6,7 @@ use clap::Parser;
 use graph_rs_sdk::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
+use cli_table::{format::Justify, print_stdout, Cell, Style, Table};
 
 use crate::auth::*;
 use crate::cli::Cli;
@@ -33,6 +34,31 @@ impl Task {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct User {
+    pub display_name: String,
+    pub id: String,
+    pub job_title: String
+}
+
+impl User {
+    pub fn new(display_name: String, id: String, job_title: String) -> User {
+        User {
+            display_name,
+            id,
+            job_title
+        }
+    }
+
+    pub fn empty() -> User {
+        User {
+            display_name: "".to_string(),
+            id: "".to_string(),
+            job_title: "".to_string()
+        }
+    }
+}
+
 pub fn show_me(json: &bool) -> Result<()> {
     let token = read_access_token();
     let client = Graph::new(&token);
@@ -45,7 +71,32 @@ pub fn show_me(json: &bool) -> Result<()> {
                     serde_json::to_string(res.body()).unwrap()
                 );
             } else {
-                println!("Me as a table: {:?}", res.body());
+                let user = match res.body().as_object() {
+                    None => {User::empty()}
+                    Some(map) => {User::new(
+                        map.get(&"displayName".to_string()).unwrap().to_string().replace("\"", ""),
+                        map.get(&"id".to_string()).unwrap().to_string().replace("\"", ""),
+                        map.get(&"jobTitle".to_string()).unwrap().to_string().replace("\"", "")) }
+                };
+
+                let table = vec![
+                    vec!["Display Name".cell().bold(true), user.display_name.cell().justify(Justify::Right)],
+                    vec!["ID".cell().bold(true), user.id.cell().justify(Justify::Right)],
+                    vec!["Job Title".cell().bold(true), user.job_title.cell().justify(Justify::Right)],
+                ]
+                    .table()
+                    .title(
+                        vec![
+                            "Items".cell().bold(true),
+                            "Details".cell().bold(true)
+                        ]
+                    )
+                    .bold(true);
+
+                match print_stdout(table) {
+                    Err(e) => println!("{:?}", e),
+                    _ => ()
+                }
             }
         },
         Err(err) => println!("Error: {}", err),
