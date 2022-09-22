@@ -50,7 +50,6 @@ async fn get_todo_lists_async() -> Result<()> {
     //dbg!("todo_lists: {:?}", &todo_lists_response);
 
     let mut list_counter = 0i16;
-
     for todo_list in &todo_lists_response.value {
         list_counter += 1;
         println!("[{}] {}", list_counter, &todo_list.display_name);

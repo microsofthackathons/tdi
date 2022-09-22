@@ -46,7 +46,7 @@ pub fn show_me(json: &bool) -> Result<()> {
             } else {
                 println!("Me as a table: {:?}", res.body());
             }
-        },
+        }
         Err(err) => println!("Error: {}", err),
     }
     Ok(())
@@ -116,10 +116,10 @@ pub fn interactive() -> Result<()> {
                     _ => {
                         println!("command is {:?}", command);
                         return Ok(());
-                    },
+                    }
                 }?;
-            },
-            Err(_) => {},
+            }
+            Err(_) => {}
         }
     }
 
