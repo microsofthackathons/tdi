@@ -94,8 +94,7 @@ pub fn read_access_token() -> String {
         Err(_) => {
             println!("tdi: unable to read access token configuration, perhaps run `tdi login`.");
             std::process::exit(0);
-        }
-
+        },
     }
 }
 
