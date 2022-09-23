@@ -32,6 +32,7 @@ pub enum Commands {
     },
     /// Show the lists in the user's ToDo
     Lists {},
+    Tasks { list_id: u16},
     /// Repl todo shell
     Intr,
 }
