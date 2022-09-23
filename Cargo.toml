@@ -27,6 +27,7 @@ tokio = "1.21"
 http = "0.2"
 directories = "4.0"
 rustyline = "10.0.0"
+cli-table = "0.4"
 
 [dependencies.chrono]
 version = "0.4.19"
