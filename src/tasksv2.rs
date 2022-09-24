@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation - 2022.
 // Licensed under the MIT License.
 
+use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
-use directories::ProjectDirs;
 
 use crate::auth::read_access_token;
 
@@ -47,7 +47,10 @@ async fn get_todo_tasks_async(id: &u16) -> Result<()> {
     let real_id = get_real_list_id(id);
 
     let response = client
-        .get(format!("https://graph.microsoft.com/v1.0/me/todo/lists/{real_id}/tasks", real_id = real_id))
+        .get(format!(
+            "https://graph.microsoft.com/v1.0/me/todo/lists/{real_id}/tasks",
+            real_id = real_id
+        ))
         .bearer_auth(token)
         .send()
         .await
@@ -63,7 +66,10 @@ async fn get_todo_tasks_async(id: &u16) -> Result<()> {
 
     for task in &todo_tasks_response.value {
         list_counter += 1;
-        println!("[{}] {} {} {}", list_counter, &task.title, &task.importance, &task.status);
+        println!(
+            "[{}] {} {} {}",
+            list_counter, &task.title, &task.importance, &task.status
+        );
         //println!("{}", &todo_list.display_name);
     }
 

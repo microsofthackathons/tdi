@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation - 2022.
 // Licensed under the MIT License.
 
+use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
-use directories::ProjectDirs;
 
 use crate::auth::read_access_token;
 
