@@ -27,7 +27,8 @@ pub fn get_oauth_client() -> OAuth {
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
-        .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
+        .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token")
+        .refresh_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
     oauth
 }
 
@@ -39,7 +40,8 @@ pub async fn req_access_token(code: String) {
         .add_scope("user.read")
         .redirect_uri("http://localhost:8000/redirect")
         .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
-        .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
+        .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token")
+        .refresh_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
 
     // The response type is automatically set to token and the grant type is
     // automatically set to authorization_code if either of these were not
@@ -47,7 +49,7 @@ pub async fn req_access_token(code: String) {
     oauth.access_code(code.as_str());
 
     let mut request = oauth.build_async().authorization_code_grant();
-    let access_token = match request.access_token().send().await {
+    let mut access_token = match request.access_token().send().await {
         Ok(res) => res,
         Err(err) => {
             println!("tdi login error: {:?}", err);
@@ -55,6 +57,18 @@ pub async fn req_access_token(code: String) {
         }
     };
 
+//    let refresh_token = match request.refresh_token().send().await {
+//        Ok(res) => res,
+//        Err(err) => {
+//            println!("tdi error fetching refresh token: {:?}", err);
+//            std::process::exit(1);
+//        }
+//    };
+
+    println!("RT: {:?}", access_token);
+    
+//    access_token.set_refresh_token(&refresh_token.refresh_token().unwrap());
+    
     oauth.access_token(access_token);
 
     // If all went well here we can print out the OAuth config with the Access
@@ -83,7 +97,7 @@ pub fn read_access_token() -> String {
     match std::fs::read_to_string(get_config_dir() + "/tdi.json") {
         Ok(data) => {
             let res: serde_json::Value =
-                serde_json::from_str(&data).expect("tdi: unnable to parse configuration.");
+                serde_json::from_str(&data).expect("tdi: unable to parse configuration.");
             let token: Option<&str> = res
                 .get("access_token")
                 .and_then(|value| value.get("access_token"))
