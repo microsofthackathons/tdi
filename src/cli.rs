@@ -20,11 +20,17 @@ pub enum Commands {
         task: String,
     },
     /// Complete the given task.
-    Complete { id: u32 },
+    Complete {
+        id: u32,
+    },
     /// Reopen the given task
-    Reopen { id: u32 },
+    Reopen {
+        id: u32,
+    },
     /// Delete the given task
-    Delete { id: u32 },
+    Delete {
+        id: u32,
+    },
     /// Show user details
     Me {
         /// Display as JSON instead of default table
@@ -32,6 +38,9 @@ pub enum Commands {
     },
     /// Show the lists in the user's ToDo
     Lists {},
+    Tasks {
+        list_id: u16,
+    },
     /// Repl todo shell
     Intr,
 }

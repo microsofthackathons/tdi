@@ -5,6 +5,7 @@ mod auth;
 mod cli;
 mod lists;
 mod tasks;
+mod tasksv2;
 
 use clap::Parser;
 
@@ -23,6 +24,7 @@ fn main() -> anyhow::Result<()> {
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
         Some(Lists {}) => lists::get_todo_lists(),
+        Some(Tasks { list_id }) => tasksv2::get_todo_tasks(list_id),
         Some(Intr) => tasks::interactive(),
         None => {
             println!("Default subcommand");
