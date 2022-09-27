@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation - 2022.
 // Licensed under the MIT License.
 
+use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
 
@@ -19,6 +20,14 @@ struct TodoList {
 #[derive(Debug, Serialize, Deserialize)]
 struct TodoListResponse {
     value: Vec<TodoList>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct TodoListIdCache {
+    display_name: String,
+    id: String,
+    easy_id: String,
 }
 
 pub fn get_todo_lists() -> Result<()> {
@@ -50,12 +59,32 @@ async fn get_todo_lists_async() -> Result<()> {
     //dbg!("todo_lists: {:?}", &todo_lists_response);
 
     let mut list_counter = 0i16;
+    let mut todo_list_id_cache: Vec<TodoListIdCache> = Vec::new();
 
     for todo_list in &todo_lists_response.value {
         list_counter += 1;
+        todo_list_id_cache.push(TodoListIdCache {
+            display_name: todo_list.display_name.clone(),
+            id: todo_list.id.clone(),
+            easy_id: list_counter.to_string(),
+        });
         println!("[{}] {}", list_counter, &todo_list.display_name);
         //println!("{}", &todo_list.display_name);
     }
 
+    // We need to cache the list ids so we can use them later
+    // to use the simpler 0-n ids. The real ones are unmanageable:
+    // AQMkADAwATMwMAItYjBkZPPtZWQ0ZS0wWEItMDAKAC4AAANkdZgpr8LxTL4LkrPqypbXAQBPdIWRHCTMQpY9NGnpa9LvAAACARIAAAA=
+    let _result = serde_json::to_writer_pretty(
+        std::fs::File::create(get_config_dir() + "/lists_cache.json").unwrap(),
+        &todo_list_id_cache,
+    );
+
     Ok(())
+}
+
+fn get_config_dir() -> String {
+    let proj_dirs = ProjectDirs::from("com", "microsofthackathons", "tdi");
+    let config_dir = proj_dirs.unwrap().config_dir().to_path_buf();
+    config_dir.into_os_string().into_string().unwrap()
 }
