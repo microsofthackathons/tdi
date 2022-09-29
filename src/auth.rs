@@ -57,8 +57,6 @@ pub async fn req_access_token(code: String) {
         }
     };
 
-    println!("RTinAT?: {:?}", access_token.refresh_token());
-
     oauth.access_token(access_token);
 
     match std::fs::create_dir_all(get_config_dir()) {
@@ -71,7 +69,6 @@ pub async fn req_access_token(code: String) {
         }
     }
     let config_path = get_config_dir() + "/tdi.json";
-    // Save our configuration to a file so we can retrieve it from other requests.
     oauth.as_file(config_path).unwrap();
 
     println!(
@@ -80,18 +77,7 @@ pub async fn req_access_token(code: String) {
     );
 }
 
-pub fn req_refresh_token() {
-    let mut oauth = OAuth::new();
-    oauth
-        .client_id(CLIENT_ID)
-        .add_scope("tasks.readwrite")
-        .add_scope("user.read")
-        .add_scope("offline_access")
-        .redirect_uri("http://localhost:8000/redirect")
-        .authorize_url("https://login.microsoftonline.com/common/oauth2/v2.0/authorize")
-        .access_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token")
-        .refresh_token_url("https://login.microsoftonline.com/common/oauth2/v2.0/token");
-
+pub fn req_refresh_token(mut oauth: OAuth) {
     let mut request = oauth.build().authorization_code_grant();
     let access_token = match request.refresh_token().send() {
         Ok(res) => res,
@@ -101,37 +87,25 @@ pub fn req_refresh_token() {
         }
     };
 
-    println!("RT: {:?}", access_token);
-
     oauth.access_token(access_token);
 
     match std::fs::create_dir_all(get_config_dir()) {
         Ok(()) => {
-            println!("tdi: creating directory path for access token config.")
+            let config_path = get_config_dir() + "/tdi.json";
+            oauth.as_file(config_path).unwrap();
         }
         Err(_) => {
             println!("tdi: error created directory path for access token config.");
             std::process::exit(1);
         }
     }
-    let config_path = get_config_dir() + "/tdi.json";
-    oauth.as_file(config_path).unwrap();
-
-    println!(
-        "tdi: refreshed token, and stored for future use at {}.",
-        get_config_dir()
-    );
 }
 
 pub fn read_access_token() -> String {
     let oauth = OAuth::from_file(get_config_dir() + "/tdi.json").unwrap();
-    println!(
-        "expired? {:?}",
-        oauth.get_access_token().unwrap().is_expired()
-    );
     if oauth.get_access_token().unwrap().is_expired() {
         println!("tdi: previous auth token has expired, refreshing.");
-        req_refresh_token();
+        req_refresh_token(oauth);
     }
     match std::fs::read_to_string(get_config_dir() + "/tdi.json") {
         Ok(data) => {
