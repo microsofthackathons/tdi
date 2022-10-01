@@ -6,6 +6,7 @@ mod cli;
 mod lists;
 mod tasks;
 mod tasksv2;
+mod user;
 
 use clap::Parser;
 
@@ -17,7 +18,7 @@ fn main() -> anyhow::Result<()> {
     match &cli.command {
         Some(Login {}) => auth::login(),
         Some(Logout {}) => auth::logout(),
-        Some(Me { json }) => tasks::show_me(json),
+        Some(Me { output_format }) => user::show_me(output_format),
         Some(Show { json }) => tasks::show_tasks(json),
         Some(Add { task }) => tasks::add_task(task),
         Some(Complete { id }) => tasks::complete_task(id),
