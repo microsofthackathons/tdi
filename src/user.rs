@@ -9,6 +9,7 @@ use std::io::Result;
 use crate::auth::*;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct User {
     pub display_name: String,
     pub given_name: String,
@@ -175,13 +176,13 @@ pub fn show_me(output_format: &str) -> Result<()> {
             match output_format {
                 "json" => {
                     user.as_json();
-                },
+                }
                 "lines" => {
                     user.as_lines();
-                },
+                }
                 "table" => {
                     user.as_table();
-                },
+                }
                 _ => {
                     user.as_lines();
                 }

@@ -34,11 +34,15 @@ pub enum Commands {
     /// Show user details
     Me {
         /// Display output as "lines", "json" or "table"
-        #[clap(default_value="lines", short, long)]
+        #[clap(default_value = "lines", short, long)]
         output_format: String,
     },
-    /// Show the lists in the user's ToDo
-    Lists {},
+    /// Show the user's To Do lists
+    Lists {
+        /// Display output as "lines", "json" or "table"
+        #[clap(default_value = "lines", short, long)]
+        output_format: String,
+    },
     Tasks {
         list_id: u16,
     },

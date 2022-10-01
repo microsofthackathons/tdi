@@ -24,7 +24,7 @@ fn main() -> anyhow::Result<()> {
         Some(Complete { id }) => tasks::complete_task(id),
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
-        Some(Lists {}) => lists::get_todo_lists(),
+        Some(Lists { output_format }) => lists::get_todo_lists(output_format),
         Some(Tasks { list_id }) => tasksv2::get_todo_tasks(list_id),
         Some(Intr) => tasks::interactive(),
         None => {
