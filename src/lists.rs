@@ -31,18 +31,18 @@ struct TodoListIdCache {
 }
 
 pub fn get_todo_lists() -> Result<()> {
+    let token = read_access_token();
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap();
 
-    let _res = rt.block_on(async { get_todo_lists_async().await });
+    let _res = rt.block_on(async { get_todo_lists_async(token).await });
 
     Ok(())
 }
 
-async fn get_todo_lists_async() -> Result<()> {
-    let token = read_access_token();
+async fn get_todo_lists_async(token: String) -> Result<()> {
     let client = reqwest::Client::new();
 
     let response = client
