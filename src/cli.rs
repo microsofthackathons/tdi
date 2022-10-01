@@ -33,8 +33,9 @@ pub enum Commands {
     },
     /// Show user details
     Me {
-        /// Display as JSON instead of default table
-        json: bool,
+        /// Display output as "lines", "json" or "table"
+        #[clap(default_value="lines", short, long)]
+        output_format: String,
     },
     /// Show the lists in the user's ToDo
     Lists {},
