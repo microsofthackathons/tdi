@@ -49,3 +49,4 @@ jobs:
     - name: Embed app's client id
       run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secret.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
     - name: cargo test
+      run: cargo test --verbose
