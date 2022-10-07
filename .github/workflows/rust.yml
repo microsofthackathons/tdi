@@ -36,6 +36,10 @@ jobs:
       run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: cargo test
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tdi 
+        path: target/debug/tdi
 
   win_functional_test:
     strategy:
@@ -50,3 +54,7 @@ jobs:
       run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secrets.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
     - name: cargo test
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tdi.exe 
+        path: target\debug\tdi.exe
