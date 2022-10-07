@@ -7,9 +7,9 @@ use serde::{Deserialize, Serialize};
 use std::io::Result;
 
 use crate::auth::*;
-use crate::user;
 use crate::cli::Cli;
 use crate::cli::Commands::*;
+use crate::user;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Task {

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation - 2022.
 // Licensed under the MIT License.
 
+use cli_table::{print_stdout, Table, WithTitle};
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use std::io::Result;
@@ -22,27 +23,30 @@ struct TodoListResponse {
     value: Vec<TodoList>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Table)]
 #[serde(rename_all = "camelCase")]
 struct TodoListIdCache {
-    display_name: String,
-    id: String,
+    #[table(title = "ID")]
     easy_id: String,
+    #[table(title = "Display Name")]
+    display_name: String,
+    #[table(title = "Long ID")]
+    id: String,
 }
 
-pub fn get_todo_lists() -> Result<()> {
+pub fn get_todo_lists(output_format: &str) -> Result<()> {
     let token = read_access_token();
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap();
 
-    let _res = rt.block_on(async { get_todo_lists_async(token).await });
+    let _res = rt.block_on(async { get_todo_lists_async(output_format, token).await });
 
     Ok(())
 }
 
-async fn get_todo_lists_async(token: String) -> Result<()> {
+async fn get_todo_lists_async(output_format: &str, token: String) -> Result<()> {
     let client = reqwest::Client::new();
 
     let response = client
@@ -68,8 +72,13 @@ async fn get_todo_lists_async(token: String) -> Result<()> {
             id: todo_list.id.clone(),
             easy_id: list_counter.to_string(),
         });
-        println!("[{}] {}", list_counter, &todo_list.display_name);
-        //println!("{}", &todo_list.display_name);
+    }
+
+    match output_format {
+        "json" => as_json(&todo_list_id_cache),
+        "table" => as_table(&todo_list_id_cache),
+        "lines" => as_lines(&todo_list_id_cache),
+        _ => as_lines(&todo_list_id_cache),
     }
 
     // We need to cache the list ids so we can use them later
@@ -81,6 +90,21 @@ async fn get_todo_lists_async(token: String) -> Result<()> {
     );
 
     Ok(())
+}
+
+fn as_table(todo_list_id_cache: &Vec<TodoListIdCache>) {
+    print_stdout(todo_list_id_cache.with_title()).unwrap();
+}
+
+fn as_json(todo_list_id_cache: &Vec<TodoListIdCache>) {
+    let json = serde_json::to_string(&todo_list_id_cache);
+    println!("{}", json.unwrap());
+}
+
+fn as_lines(todo_list_id_cache: &Vec<TodoListIdCache>) {
+    for todo_list in todo_list_id_cache {
+        println!("[{}] {}", todo_list.easy_id, todo_list.display_name);
+    }
 }
 
 fn get_config_dir() -> String {

@@ -20,26 +20,30 @@ pub enum Commands {
         task: String,
     },
     /// Complete the given task.
-    Complete {
-        id: u32,
-    },
+    Complete { id: u32 },
     /// Reopen the given task
-    Reopen {
-        id: u32,
-    },
+    Reopen { id: u32 },
     /// Delete the given task
-    Delete {
-        id: u32,
-    },
-    /// Show user details
+    Delete { id: u32 },
+    /// Show the user's details
     Me {
         /// Display output as "lines", "json" or "table"
-        #[clap(default_value="lines", short, long)]
+        #[clap(default_value = "lines", short, long)]
         output_format: String,
     },
-    /// Show the lists in the user's ToDo
-    Lists {},
+    /// Show the user's To Do lists
+    Lists {
+        /// Display output as "lines", "json" or "table"
+        #[clap(default_value = "lines", short, long)]
+        output_format: String,
+    },
     Tasks {
+        /// Display output as "lines", "json" or "table"
+        #[clap(default_value = "lines", short, long)]
+        output_format: String,
+        /// Display all tasks, including those completed
+        #[clap(short, long)]
+        display_all: bool,
         list_id: u16,
     },
     /// Repl todo shell

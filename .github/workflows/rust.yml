@@ -16,19 +16,45 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Embed app's client id
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo clippy --verbose
 
-  functional_test:
+  nix_functional_test:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-latest, macos-latest]
         rust: [stable]
     runs-on: ${{ matrix.platform }}
 
     steps:
     - uses: actions/checkout@v2
+    - name: Embed app's client id
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: cargo test
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tdi 
+        path: target/debug/tdi
+
+  win_functional_test:
+    strategy:
+      matrix:
+        platform: [windows-latest]
+        rust: [stable]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Embed app's client id
+      run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secrets.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
+    - name: cargo test
+      run: cargo test --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tdi.exe 
+        path: target\debug\tdi.exe
