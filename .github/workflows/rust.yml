@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: microsoft/variable-substitution@v1
       with:
-        files: 'auth.rs'
+        files: 'src/auth.rs'
       env:
         CLIENTID: ${{ secrets.CLIENTID }}
     - name: cargo test
