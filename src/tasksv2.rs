@@ -114,9 +114,9 @@ fn as_json(todo_tasks: TodoTaskResponse, display_all: &bool) {
 
 fn as_table(todo_tasks: TodoTaskResponse, display_all: &bool) {
     // TODO
-    if *display_all {
-    } else {
-    }
+    // if *display_all {
+    // } else {
+    // }
 }
 
 fn as_lines(todo_tasks: TodoTaskResponse, display_all: &bool) {
