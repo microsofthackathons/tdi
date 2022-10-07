@@ -20,8 +20,17 @@ jobs:
       run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: Build
       run: cargo build --verbose
+    - name: Install required cargo
+      run: cargo install clippy-sarif sarif-fmt
     - name: Run tests
-      run: cargo clippy --verbose
+      run: cargo clippy --verbose --all-features --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+      continue-on-error: true
+
+    - name: Upload analysis results to GitHub
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: rust-clippy-results.sarif
+        wait-for-processing: true
 
   nix_functional_test:
     strategy:
