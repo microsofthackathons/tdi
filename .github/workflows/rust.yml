@@ -16,29 +16,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: microsoft/variable-substitution@v1
-      with:
-        files: 'src/auth.rs'
-      env:
-        CLIENTID: ${{ secrets.CLIENTID }}
+    - name: Embed app's client id
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo clippy --verbose
 
-  functional_test:
+  nix_functional_test:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-latest, macos-latest]
         rust: [stable]
     runs-on: ${{ matrix.platform }}
 
     steps:
     - uses: actions/checkout@v2
-    - uses: microsoft/variable-substitution@v1
-      with:
-        files: 'src/auth.rs'
-      env:
-        CLIENTID: ${{ secrets.CLIENTID }}
+    - name: Embed app's client id
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
     - name: cargo test
       run: cargo test --verbose
+
+  win_functional_test:
+    strategy:
+      matrix:
+        platform: [windows-latest]
+        rust: [stable]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Embed app's client id
+      run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secret.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
+    - name: cargo test
