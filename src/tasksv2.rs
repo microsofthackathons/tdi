@@ -29,19 +29,33 @@ struct TodoListIdCache {
     easy_id: String,
 }
 
-pub fn get_todo_tasks(id: &u16) -> Result<()> {
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct TaskIdCache {
+    display_name: String,
+    id: String,
+    easy_id: String,
+}
+
+pub fn get_todo_tasks(output_format: &str, display_all: &bool, id: &u16) -> Result<()> {
     let token = read_access_token();
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap();
 
-    let _res = rt.block_on(async { get_todo_tasks_async(token, id).await });
+    let _res =
+        rt.block_on(async { get_todo_tasks_async(output_format, display_all, token, id).await });
 
     Ok(())
 }
 
-async fn get_todo_tasks_async(token: String, id: &u16) -> Result<()> {
+async fn get_todo_tasks_async(
+    output_format: &str,
+    display_all: &bool,
+    token: String,
+    id: &u16,
+) -> Result<()> {
     let client = reqwest::Client::new();
 
     let real_id = get_real_list_id(id);
@@ -63,17 +77,71 @@ async fn get_todo_tasks_async(token: String, id: &u16) -> Result<()> {
     //dbg!("todo_lists: {:?}", &todo_tasks_response);
 
     let mut list_counter = 0i16;
+    let mut todo_task_id_cache: Vec<TaskIdCache> = Vec::new();
 
     for task in &todo_tasks_response.value {
         list_counter += 1;
-        println!(
-            "[{}] {} {} {}",
-            list_counter, &task.title, &task.importance, &task.status
-        );
-        //println!("{}", &todo_list.display_name);
+        todo_task_id_cache.push(TaskIdCache {
+            display_name: task.title.clone(),
+            id: task.id.clone(),
+            easy_id: list_counter.to_string(),
+        });
     }
 
+    match output_format {
+        "json" => as_json(todo_tasks_response, &display_all),
+        "table" => as_table(todo_tasks_response, &display_all),
+        "lines" => as_lines(todo_tasks_response, &display_all),
+        _ => as_lines(todo_tasks_response, &display_all),
+    }
+
+    let _result = serde_json::to_writer_pretty(
+        std::fs::File::create(get_config_dir() + "/tasks_cache.json").unwrap(),
+        &todo_task_id_cache,
+    );
+
     Ok(())
+}
+
+fn as_json(todo_tasks: TodoTaskResponse, display_all: &bool) {
+    if *display_all {
+        let json = serde_json::to_string(&todo_tasks);
+        println!("{}", json.unwrap());
+    } else {
+        // Filter out the completed tasks
+    }
+}
+
+fn as_table(todo_tasks: TodoTaskResponse, display_all: &bool) {
+    // TODO
+    if *display_all {
+    } else {
+    }
+}
+
+fn as_lines(todo_tasks: TodoTaskResponse, display_all: &bool) {
+    let mut list_counter = 0i16;
+
+    if *display_all {
+        for task in &todo_tasks.value {
+            list_counter += 1;
+            println!(
+                "[{}] {} // ({}:{})",
+                list_counter, &task.title, &task.importance, &task.status
+            );
+        }
+    } else {
+        // filter out completed
+        for task in &todo_tasks.value {
+            list_counter += 1;
+            if task.status != "completed" {
+                println!(
+                    "[{}] {} // ({})",
+                    list_counter, &task.title, &task.importance
+                );
+            }
+        }
+    }
 }
 
 fn get_config_dir() -> String {

@@ -25,7 +25,11 @@ fn main() -> anyhow::Result<()> {
         Some(Reopen { id }) => tasks::reopen_task(id),
         Some(Delete { id }) => tasks::delete_task(id),
         Some(Lists { output_format }) => lists::get_todo_lists(output_format),
-        Some(Tasks { list_id }) => tasksv2::get_todo_tasks(list_id),
+        Some(Tasks {
+            output_format,
+            display_all,
+            list_id,
+        }) => tasksv2::get_todo_tasks(output_format, display_all, list_id),
         Some(Intr) => tasks::interactive(),
         None => {
             println!("Default subcommand");

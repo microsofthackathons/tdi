@@ -12,7 +12,7 @@ use warp::Filter;
 // If you have already given admin consent to a user you can skip
 // browser authorization step and go strait to requesting an access token.
 // The client_id and client_secret must be changed before running this example.
-static CLIENT_ID: &str = "6c3ae59f-ebe9-4dad-b4e6-8873545b6155";
+static CLIENT_ID: &str = "CLIENTID";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessCode {
