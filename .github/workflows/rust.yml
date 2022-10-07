@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Embed app's client id
-      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: Build
       run: cargo build --verbose
     - name: Run tests
@@ -33,7 +33,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Embed app's client id
-      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ secrets.CLIENTID }}/g'' {} \;
     - name: cargo test
       run: cargo test --verbose
 
@@ -47,6 +47,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Embed app's client id
-      run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secret.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
+      run: powershell -Command "(gc src\auth.rs) -replace 'CLIENTID', '${{ secrets.CLIENTID }}' | Out-File -encoding ASCII src\auth.rs"
     - name: cargo test
       run: cargo test --verbose
