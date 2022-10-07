@@ -50,3 +50,7 @@ To produce the SBOM, from the project repo's root directory run:
 $ cargo install cargo-cyclonedx
 $ cargo cyclonedx
 ```
+
+## Privacy
+
+See PRIVACY.md
