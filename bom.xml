@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.3" serialNumber="urn:uuid:ca39325f-f1d8-4d4c-b320-390c14585b5c" version="1">
+  <metadata>
+    <timestamp>2022-10-07T21:15:51.891825000Z</timestamp>
+    <tools>
+      <tool>
+        <vendor>CycloneDX</vendor>
+        <name>cargo-cyclonedx</name>
+        <version>0.3.7</version>
+      </tool>
+    </tools>
+    <component type="application" bom-ref="pkg:cargo/tdi@0.0.1">
+      <name>tdi</name>
+      <version>0.0.1</version>
+      <scope>required</scope>
+      <purl>pkg:cargo/tdi@0.0.1</purl>
+    </component>
+  </metadata>
+  <components>
+    <component type="library" bom-ref="pkg:cargo/anyhow@1.0.64">
+      <name>anyhow</name>
+      <version>1.0.64</version>
+      <description>Flexible concrete Error type built on std::error::Error</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/anyhow@1.0.64</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/anyhow</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/dtolnay/anyhow</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/assert_cmd@2.0.4">
+      <name>assert_cmd</name>
+      <version>2.0.4</version>
+      <description>Test CLI Applications.</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/assert_cmd@2.0.4</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>http://docs.rs/assert_cmd/</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/assert-rs/assert_cmd</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/assert-rs/assert_cmd.git</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/chrono@0.4.22">
+      <name>chrono</name>
+      <version>0.4.22</version>
+      <description>Date and time library for Rust</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/chrono@0.4.22</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/chrono/</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/chronotope/chrono</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/chronotope/chrono</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/clap@3.2.20">
+      <name>clap</name>
+      <version>3.2.20</version>
+      <description>A simple to use, efficient, and full-featured Command Line Argument Parser</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/clap@3.2.20</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/clap-rs/clap</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/cli-table@0.4.7">
+      <name>cli-table</name>
+      <version>0.4.7</version>
+      <description>A crate for printing tables on command line</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/cli-table@0.4.7</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/devashishdxt/cli-table</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/devashishdxt/cli-table</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/comfy-table@5.0.1">
+      <name>comfy-table</name>
+      <version>5.0.1</version>
+      <description>An easy to use library for building beautiful tables with automatic content wrapping</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/comfy-table@5.0.1</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/comfy-table/</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/nukesor/comfy-table</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/nukesor/comfy-table</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/directories@4.0.1">
+      <name>directories</name>
+      <version>4.0.1</version>
+      <description>A tiny mid-level library that provides platform-specific standard locations of directories for config, cache and other data on Linux, Windows and macOS by leveraging the mechanisms defined by the XDG base/user directory specifications on Linux, the Known Folder API on Windows, and the Standard Directory guidelines on macOS.</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/directories@4.0.1</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/soc/directories-rs</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/exitcode@1.1.2">
+      <name>exitcode</name>
+      <version>1.1.2</version>
+      <description>Preferred system exit codes as defined by sysexits.h</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/exitcode@1.1.2</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/exitcode</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/benwilber/exitcode</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/benwilber/exitcode</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/from_as@0.1.1">
+      <name>from_as</name>
+      <version>0.1.1</version>
+      <description>Traits and derive macros to Read and write types that implement serde Serialize and deserialize to files</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/from_as@0.1.1</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/sreeise/from_as</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/graph-rs-sdk@0.3.0">
+      <name>graph-rs-sdk</name>
+      <version>0.3.0</version>
+      <description>Microsoft Graph Api Client</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/graph-rs-sdk@0.3.0</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/sreeise/graph-rs</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/home@0.5.3">
+      <name>home</name>
+      <version>0.5.3</version>
+      <description>Shared definitions of home directories</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/home@0.5.3</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/home</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/brson/home</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/http@0.2.8">
+      <name>http</name>
+      <version>0.2.8</version>
+      <description>A set of types for representing HTTP requests and responses. </description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/http@0.2.8</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/http</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/hyperium/http</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/predicates@2.1.1">
+      <name>predicates</name>
+      <version>2.1.1</version>
+      <description>An implementation of boolean-valued predicate functions.</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/predicates@2.1.1</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/predicates</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/assert-rs/predicates-rs</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/assert-rs/predicates-rs</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/regex@1.6.0">
+      <name>regex</name>
+      <version>1.6.0</version>
+      <description>An implementation of regular expressions for Rust. This implementation uses finite automata and guarantees linear time matching on all inputs. </description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/regex@1.6.0</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/regex</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/rust-lang/regex</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/rust-lang/regex</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/reqwest@0.11.11">
+      <name>reqwest</name>
+      <version>0.11.11</version>
+      <description>higher level HTTP client library</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/reqwest@0.11.11</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/reqwest</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/seanmonstar/reqwest</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/rustyline@10.0.0">
+      <name>rustyline</name>
+      <version>10.0.0</version>
+      <description>Rustyline, a readline implementation based on Antirez's Linenoise</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/rustyline@10.0.0</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>http://docs.rs/rustyline</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/kkawakam/rustyline</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/serde@1.0.144">
+      <name>serde</name>
+      <version>1.0.144</version>
+      <description>A generic serialization/deserialization framework</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/serde@1.0.144</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.serde.rs/serde/</url>
+        </reference>
+        <reference type="website">
+          <url>https://serde.rs</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/serde-rs/serde</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/serde_json@1.0.85">
+      <name>serde_json</name>
+      <version>1.0.85</version>
+      <description>A JSON serialization file format</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/serde_json@1.0.85</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.serde.rs/serde_json/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/serde-rs/json</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/shellexpand@2.1.2">
+      <name>shellexpand</name>
+      <version>2.1.2</version>
+      <description>Shell-like expansions in strings</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/shellexpand@2.1.2</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>http://docs.rs/shellexpand/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://gitlab.com/ijackson/rust-shellexpand</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/structopt@0.3.26">
+      <name>structopt</name>
+      <version>0.3.26</version>
+      <description>Parse command line argument by defining a struct.</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>Apache-2.0 OR MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/structopt@0.3.26</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/structopt</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/TeXitoi/structopt</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/tokio@1.21.0">
+      <name>tokio</name>
+      <version>1.21.0</version>
+      <description>An event-driven, non-blocking I/O platform for writing asynchronous I/O backed applications. </description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/tokio@1.21.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://tokio.rs</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/tokio-rs/tokio</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/toml@0.4.10">
+      <name>toml</name>
+      <version>0.4.10</version>
+      <description>A native Rust encoder and decoder of TOML-formatted files and streams. Provides implementations of the standard Serialize/Deserialize traits for TOML data to facilitate deserializing and serializing Rust structures. </description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT OR Apache-2.0</expression>
+      </licenses>
+      <purl>pkg:cargo/toml@0.4.10</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/toml</url>
+        </reference>
+        <reference type="website">
+          <url>https://github.com/alexcrichton/toml-rs</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/alexcrichton/toml-rs</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:cargo/warp@0.3.2">
+      <name>warp</name>
+      <version>0.3.2</version>
+      <description>serve the web at warp speeds</description>
+      <scope>required</scope>
+      <licenses>
+        <expression>MIT</expression>
+      </licenses>
+      <purl>pkg:cargo/warp@0.3.2</purl>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://docs.rs/warp</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/seanmonstar/warp</url>
+        </reference>
+      </externalReferences>
+    </component>
+  </components>
+</bom>
