@@ -16,8 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Embed app's client id
-      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
+    - uses: microsoft/variable-substitution@v1
+      with:
+        files: 'auth.rs'
+      env:
+        CLIENTID: ${{ secrets.CLIENTID }}
     - name: Build
       run: cargo build --verbose
     - name: Run tests
@@ -32,11 +35,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Embed app's client id
-      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
+    - uses: microsoft/variable-substitution@v1
+      with:
+        files: 'auth.rs'
+      env:
+        CLIENTID: ${{ secrets.CLIENTID }}
     - name: cargo test
       run: cargo test --verbose
-    - uses: actions/upload-artifact@v3
-      with:
-        name: my-artifact
-        path: target/debug/tdi.*
