@@ -32,5 +32,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Embed app's client id
+      run: find src/ -name 'auth.rs' -type f -exec sed -i ''s/#{CLIENTID}#/${{ env.CLIENTID }}/g'' {} \;
     - name: cargo test
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: target/debug/tdi.*
